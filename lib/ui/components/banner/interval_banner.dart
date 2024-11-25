@@ -1,4 +1,3 @@
-// import 'package:f_bloc_1/bloc/banner/banner_bloc.dart';
 import 'package:f_bloc_1/bloc/banner_interval/banner_interval_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,9 +12,9 @@ class IntervalBanner extends StatelessWidget {
         (Scaffold.of(context).appBarMaxHeight ?? 0);
     final bannerState = context.watch<BannerIntervalBloc>().state;
     final banners = switch (bannerState) {
-      BannerLoading() => bannerState.previousBanners,
-      BannerCountdown() => bannerState.previousBanners,
-      BannerLoaded() => bannerState.banners,
+      BannerIntervalLoading() => bannerState.previousBanners,
+      BannerIntervalCountdown() => bannerState.previousBanners,
+      BannerIntervalLoaded() => bannerState.banners,
       _ => [],
     };
 

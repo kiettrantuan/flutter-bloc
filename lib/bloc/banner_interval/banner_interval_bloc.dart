@@ -17,12 +17,19 @@ class BannerIntervalBloc
 
   bool get isStop => _isStop;
 
-  BannerIntervalBloc({required this.repository}) : super(BannerInitial()) {
+  BannerIntervalBloc({required this.repository})
+      : super(BannerIntervalInitial()) {
     on<StartFetchingBanners>(_onStartFetchingBanners);
     on<FetchingBanners>(_onFetchingBanners);
     on<StopFetchingBanners>(_onStopFetchingBanners);
     on<UpdateBanners>(_onUpdateBanners);
     on<CountdownTick>(_onCountdownTick);
+  }
+
+  @override
+  Future<void> close() {
+    _isStop = true;
+    return super.close();
   }
 
   Future<void> _onStartFetchingBanners(
@@ -38,23 +45,25 @@ class BannerIntervalBloc
       StopFetchingBanners event, Emitter<BannerIntervalState> emit) {
     debugPrint('_onStopFetchingBanners');
     _isStop = true;
-    if (event.errorMessage != null) emit(BannerError(event.errorMessage!));
+    if (event.errorMessage != null) {
+      emit(BannerIntervalError(event.errorMessage!));
+    }
   }
 
   void _onUpdateBanners(
       UpdateBanners event, Emitter<BannerIntervalState> emit) {
-    emit(BannerLoaded(event.banners));
+    emit(BannerIntervalLoaded(event.banners));
   }
 
   void _onFetchingBanners(
       FetchingBanners event, Emitter<BannerIntervalState> emit) {
-    emit(BannerLoading(previousBanners: event.previousBanners));
+    emit(BannerIntervalLoading(previousBanners: event.previousBanners));
   }
 
   void _onCountdownTick(
       CountdownTick event, Emitter<BannerIntervalState> emit) {
     debugPrint('_onCountdownTick ${event.countdown}');
-    emit(BannerCountdown(
+    emit(BannerIntervalCountdown(
         countdown: event.countdown, previousBanners: event.previousBanners));
   }
 

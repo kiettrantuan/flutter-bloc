@@ -5,29 +5,30 @@ sealed class BannerIntervalState {
   const BannerIntervalState();
 }
 
-class BannerInitial extends BannerIntervalState {}
+class BannerIntervalInitial extends BannerIntervalState {}
 
-class BannerLoading extends BannerIntervalState {
+class BannerIntervalLoading extends BannerIntervalState {
   final List<Banner> previousBanners;
 
-  const BannerLoading({this.previousBanners = const []});
+  const BannerIntervalLoading({this.previousBanners = const []});
 }
 
-class BannerLoaded extends BannerIntervalState {
+class BannerIntervalLoaded extends BannerIntervalState {
   final List<Banner> banners;
 
-  const BannerLoaded(this.banners);
+  const BannerIntervalLoaded(this.banners);
 }
 
-class BannerError extends BannerIntervalState {
+class BannerIntervalError extends BannerIntervalState {
   final String message;
 
-  const BannerError(this.message);
+  const BannerIntervalError(this.message);
 }
 
-class BannerCountdown extends BannerIntervalState {
+class BannerIntervalCountdown extends BannerIntervalState {
   final int countdown;
   final List<Banner> previousBanners;
 
-  const BannerCountdown({this.countdown = 0, this.previousBanners = const []});
+  const BannerIntervalCountdown(
+      {this.countdown = 0, this.previousBanners = const []});
 }

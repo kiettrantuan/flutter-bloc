@@ -4,6 +4,7 @@ import 'package:f_bloc_1/bloc/banner/banner_bloc.dart';
 import 'package:f_bloc_1/data/providers/banner_provider.dart';
 import 'package:f_bloc_1/data/repositories/banner_repository.dart';
 import 'package:f_bloc_1/ui/components/banner/home_banner.dart';
+import 'package:f_bloc_1/ui/screens/interval_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -48,25 +49,47 @@ class HomeScreen extends StatelessWidget {
               },
             )
           ]),
-          floatingActionButton: BlocBuilder<BannerBloc, BannerState>(
-            builder: (ctx, state) => IgnorePointer(
-              ignoring: state is BannerLoading,
-              child: FloatingActionButton(
-                tooltip: 'Reload',
-                backgroundColor: state is BannerLoading ? Colors.black54 : null,
-                foregroundColor: state is BannerLoading ? Colors.grey : null,
+          floatingActionButton: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              FloatingActionButton(
+                heroTag: 'to_interval',
                 onPressed: () {
-                  final previousBanners =
-                      (state is BannerLoaded) ? state.banners : null;
-                  ctx.read<BannerBloc>().add(FetchBanners(
-                        page: 1 + Random().nextInt(10),
-                        limit: 3 + Random().nextInt(10),
-                        previousBanners: previousBanners,
-                      ));
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => const IntervalScreen(),
+                    ),
+                  );
                 },
-                child: const Icon(Icons.refresh),
+                child: const Icon(Icons.timer_outlined),
               ),
-            ),
+              const SizedBox(
+                height: 10,
+              ),
+              BlocBuilder<BannerBloc, BannerState>(
+                builder: (ctx, state) => IgnorePointer(
+                  ignoring: state is BannerLoading,
+                  child: FloatingActionButton(
+                    heroTag: 're-fetch',
+                    tooltip: 'Reload',
+                    backgroundColor:
+                        state is BannerLoading ? Colors.black54 : null,
+                    foregroundColor:
+                        state is BannerLoading ? Colors.grey : null,
+                    onPressed: () {
+                      final previousBanners =
+                          (state is BannerLoaded) ? state.banners : null;
+                      ctx.read<BannerBloc>().add(FetchBanners(
+                            page: 1 + Random().nextInt(10),
+                            limit: 3 + Random().nextInt(10),
+                            previousBanners: previousBanners,
+                          ));
+                    },
+                    child: const Icon(Icons.refresh),
+                  ),
+                ),
+              ),
+            ],
           ), // This trailing comma makes auto-formatting nicer for build methods.
         ));
   }
