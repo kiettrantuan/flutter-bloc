@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       ),
       home: BlocProvider(
           create: (_) =>
-              BannerBloc(repository: repository)..add(FetchBanners()),
+              BannerBloc(repository: repository)..add(const FetchBanners()),
           child: const HomeScreen()),
     );
   }
