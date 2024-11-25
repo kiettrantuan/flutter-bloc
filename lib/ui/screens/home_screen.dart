@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:f_bloc_1/bloc/banner/banner_bloc.dart';
-import 'package:f_bloc_1/presentation/components/home/home_banner.dart';
+import 'package:f_bloc_1/ui/components/home/home_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -1,7 +1,7 @@
 import 'package:f_bloc_1/bloc/banner/banner_bloc.dart';
 import 'package:f_bloc_1/data/providers/banner_provider.dart';
 import 'package:f_bloc_1/data/repositories/banner_repository.dart';
-import 'package:f_bloc_1/presentation/screens/home_screen.dart';
+import 'package:f_bloc_1/ui/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
