@@ -1,22 +1,21 @@
-import 'dart:math';
-
-import 'package:f_bloc_1/bloc/banner/banner_bloc.dart';
+// import 'package:f_bloc_1/bloc/banner/banner_bloc.dart';
+import 'package:f_bloc_1/bloc/banner_interval/banner_interval_bloc.dart';
 import 'package:f_bloc_1/data/providers/banner_provider.dart';
 import 'package:f_bloc_1/data/repositories/banner_repository.dart';
-import 'package:f_bloc_1/ui/components/banner/home_banner.dart';
+import 'package:f_bloc_1/ui/components/banner/interval_banner.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class IntervalScreen extends StatelessWidget {
+  const IntervalScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     final repository = BannerRepository(dataProvider: BannerDataProvider());
 
     return BlocProvider(
-        create: (_) =>
-            BannerBloc(repository: repository)..add(const FetchBanners()),
+        create: (_) => BannerIntervalBloc(repository: repository)
+          ..add(const StartFetchingBanners()),
         child: Scaffold(
           appBar: AppBar(
             backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -29,9 +28,11 @@ class HomeScreen extends StatelessWidget {
                   axisDirection: AxisDirection.down,
                   color: Colors.black54,
                   child: SingleChildScrollView(
-                      physics: ClampingScrollPhysics(), child: HomeBanner())),
+                      physics: ClampingScrollPhysics(),
+                      child: IntervalBanner())),
             ),
-            BlocBuilder<BannerBloc, BannerState>(
+            // BlocBuilder<BannerBloc, BannerState>(
+            BlocBuilder<BannerIntervalBloc, BannerIntervalState>(
               builder: (ctx, state) {
                 if (state is BannerLoading) {
                   return Container(
@@ -48,23 +49,27 @@ class HomeScreen extends StatelessWidget {
               },
             )
           ]),
-          floatingActionButton: BlocBuilder<BannerBloc, BannerState>(
+          // floatingActionButton: BlocBuilder<BannerBloc, BannerState>(
+          floatingActionButton:
+              BlocBuilder<BannerIntervalBloc, BannerIntervalState>(
             builder: (ctx, state) => IgnorePointer(
               ignoring: state is BannerLoading,
               child: FloatingActionButton(
-                tooltip: 'Reload',
+                tooltip: 'Stop',
                 backgroundColor: state is BannerLoading ? Colors.black54 : null,
                 foregroundColor: state is BannerLoading ? Colors.grey : null,
                 onPressed: () {
-                  final previousBanners =
-                      (state is BannerLoaded) ? state.banners : null;
-                  ctx.read<BannerBloc>().add(FetchBanners(
-                        page: 1 + Random().nextInt(10),
-                        limit: 3 + Random().nextInt(10),
-                        previousBanners: previousBanners,
-                      ));
+                  ctx.read<BannerIntervalBloc>().isStop
+                      ? ctx
+                          .read<BannerIntervalBloc>()
+                          .add(const StartFetchingBanners())
+                      : ctx
+                          .read<BannerIntervalBloc>()
+                          .add(const StopFetchingBanners());
                 },
-                child: const Icon(Icons.refresh),
+                child: state is BannerCountdown
+                    ? Text('${state.countdown}')
+                    : const Icon(Icons.close),
               ),
             ),
           ), // This trailing comma makes auto-formatting nicer for build methods.

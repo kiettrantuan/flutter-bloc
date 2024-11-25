@@ -11,7 +11,7 @@ class BannerBloc extends Bloc<BannerEvent, BannerState> {
 
   BannerBloc({required this.repository}) : super(BannerInitial()) {
     on<FetchBanners>((event, emit) async {
-      emit(BannerLoading());
+      emit(BannerLoading(previousBanners: event.previousBanners));
       try {
         final banners =
             await repository.getBanners(page: event.page, limit: event.limit);
