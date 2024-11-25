@@ -1,6 +1,6 @@
 # f_bloc_1
 
-Flutter Bloc
+Flutter + Bloc with flutter_bloc & http
 
 ## Getting Started
 
